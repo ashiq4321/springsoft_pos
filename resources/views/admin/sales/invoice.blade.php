@@ -122,7 +122,7 @@
                           </div>
                       </div>
                       <div class="container-fluid mt-1 w-100">
-                          <a href="/sales" class="btn btn-primary float-right mt-4 ml-2"><i data-feather="send"
+                          <a href="/delivery" class="btn btn-primary float-right mt-4 ml-2"><i data-feather="send"
                                   class="mr-3 icon-md"></i>Back</a>
                           <a href="#" onclick="window.print();" class="btn btn-outline-primary float-right mt-4"><i
                                   data-feather="printer" class="mr-2 icon-md"></i>Print</a>

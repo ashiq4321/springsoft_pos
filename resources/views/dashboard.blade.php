@@ -26,7 +26,7 @@ SpringSoft-IT Dashboard
             </div>
             <div class="row">
               <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{$total_customer}}
+                <h3 class="mb-2">
                 </h3>
               </div>
             </div>
@@ -41,7 +41,7 @@ SpringSoft-IT Dashboard
             </div>
             <div class="row">
               <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{$total_warehouse}}</h3>
+                <h3 class="mb-2"></h3>
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@ SpringSoft-IT Dashboard
             </div>
             <div class="row">
               <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">{{$total_supplier}}</h3>
+                <h3 class="mb-2"></h3>
                 
               </div>
             </div>

@@ -107,19 +107,7 @@ Add Gift Card</button>
 <input type="number" id="amount" name="amount" step="any" required class="form-control">
 <span class="text-danger" id="aError"></span>                    
 </div>
-<div class="form-group">
-<label>User List</label>&nbsp;
-<input type="checkbox" id="user" name="user" value="1">
-</div>
-<div class="form-group user_list">
-<label>User *</label>
-<select name="user_id" id="user_id" class="form-control" required data-live-search="true" data-live-search-style="begins">
-    <option selected disabled value="">Select User...</option>
-    @foreach($user as $row)
-    <option value="{{ $row->id }}">{{$row->name}}</option>
-    @endforeach
-</select>
-</div>
+
 <div class="form-group customer_list">
 <label>Customer *</label>
 <select name="customer_id"  id="customer_id" class="form-control" required data-live-search="true" data-live-search-style="begins">

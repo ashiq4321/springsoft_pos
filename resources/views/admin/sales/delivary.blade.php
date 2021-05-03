@@ -66,10 +66,10 @@ POS || Inventory
                 <thead>
                 <tr>
                 <th scope="col">Reference</th>
-                <th scope="col">Seller</th>
+                <th scope="col">Seller Ref No</th>
                 <th scope="col">Address</th>
                 <th scope="col">Delivered by</th>
-                <th scope="col">Recived b</th>
+                <th scope="col">Recived by</th>
                 <th scope="col">File</th>
                 <th scope="col">Note</th>
                 <th scope="col">status</th>
@@ -87,10 +87,6 @@ POS || Inventory
 </div>
 
   
-
-
-  
-
 {{-- -------------------script--------------------- --}}
 
 <script>
