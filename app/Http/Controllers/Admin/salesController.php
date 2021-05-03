@@ -13,7 +13,6 @@ use App\Payment;
 use App\Payment_with_credit_card;
 use App\Product_sale;
 use App\delivery;
-
 use App\Payment_with_giftcard;
 use App\Payment_with_cheque;
 use App\Product_warehouse;
@@ -260,8 +259,7 @@ class salesController extends Controller
         $validated = $request->validate([
             'customer_id' => 'required',
             'warehouse_id' => 'required',
-            'sale_note' => 'required',
-            'staff_note' => 'required',
+            
 
         ]);
 
@@ -301,17 +299,19 @@ class salesController extends Controller
             'staff_note' => $request->staff_note,
         ]);
         $customer = Customer::find($request->customer_id);
+        $user = User::find(Auth::user()->id);
+
 
         $delivery = Delivery::create([
             'ref' => mt_rand(),
-            'sale_id' => $sale->id,
+            'sale_id' => $sale->reference_no,
             'address' =>  $customer->address,
-            'deli_by' =>  Auth::user()->id,
+            'deli_by' => $user->name,
             'rec_by' =>  $customer->name,
             'file' =>  $request->document,
             'file' =>  $request->document,
             'note' => $sale->sale_note,
-            'status' => $sale->payment_status,
+            'status' => 'Picking',
 
         ]);
 
@@ -584,7 +584,7 @@ class salesController extends Controller
                 $product_warehouse->save();
 
                 $product = Product::find($p_id);
-                $product->quantity = $product->quantity -  $data->qty;
+                $product->qty = $product->qty -  $data->qty;
                 $product->save();
 
                 $data->save();
@@ -641,13 +641,15 @@ class salesController extends Controller
     //*/ Delivary by Ashraful Alam*//*
 
     public function getDelivery()
-    {
+    { 
+      
         return view('admin.sales.delivery.index');
     }
     public function getdeliveryData()
     {
         $data = DB::table('deliveries')->get();
-        return response()->json($data);
+            return response()->json($data);
+
     }
     public function editDeliveryData($id)
     {
