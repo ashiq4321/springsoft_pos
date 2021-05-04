@@ -19,7 +19,8 @@ $(document).ready(function() {
         //checkQuantity(String(qty), true);
     });
     $('#warehouse_id').change(function() {
-        //swal("Inserted!", "Data has been Successfully Insert!", "success")   /
+        $('input[name="warehouse_id"]').val($('#warehouse_id').val());
+        swal("Remember!", "This can not be done!, please reload the page to select another warehouse", "warning") 
         $(this).prop('disabled', true);
     });
 
@@ -81,12 +82,14 @@ $(document).ready(function() {
     });
 
     $("#gift-card-btn").on("click", function() {
+        $("#credit_card_id").attr("required", false);
         $('input[name="credit_card_id"]').val('');
         $('#paid_by').val('gift card');
         $('select[name="paid_by_id_select"]').val(2);
         $('.selectpicker').selectpicker('refresh');
         $('div.qc').hide();
         giftCard();
+        
     });
 
     $(".payment-btn").on("click", function() {
@@ -97,6 +100,7 @@ $(document).ready(function() {
     });
 
     $("#draft-btn").on("click", function() {
+        $("#credit_card_id").attr("required", true);
         $('input[name="credit_card_id"]').val('');
         var audio = $("#mysoundclip2")[0];
         audio.play();
@@ -112,6 +116,7 @@ $(document).ready(function() {
     });
 
     $("#credit-card-btn").on("click", function() {
+        $("#credit_card_id").attr("required", true);
         $('select[name="paid_by_id_select"]').val(3);
         $('#paid_by').val('card');
         $('.selectpicker').selectpicker('refresh');
@@ -128,6 +133,7 @@ $(document).ready(function() {
     });
 
     $("#cash-btn").on("click", function() {
+        $("#credit_card_id").attr("required", false);
         $('input[name="credit_card_id"]').val('');
         $('#paid_by').val('cash');
         $('select[name="paid_by_id_select"]').val('1');
@@ -136,7 +142,7 @@ $(document).ready(function() {
         hide();
     });
 
-    $("#paypal-btn").on("click", function() {
+    /* $("#paypal-btn").on("click", function() {
         $('input[name="credit_card_id"]').val('');
         $('select[name="paid_by_id_select"]').val(5);
         $('.selectpicker').selectpicker('refresh');
@@ -151,7 +157,7 @@ $(document).ready(function() {
         $('div.qc').hide();
         hide();
         deposits();
-    });
+    }); */
 
     /* $('body').on('click', function(e) {
         $('.filter-window').hide('fast','slide');
@@ -297,20 +303,17 @@ $(document).ready(function() {
 
 
     $('#add-payment select[name="gift_card_id_select"]').on("change", function() {
-
-        // var balance = gift_card_amount[$(this).val()] - gift_card_expense[$(this).val()];
-        // $('#add-payment input[name="gift_card_id"]').val($(this).val());
-        // if ($('input[name="paid_amount"]').val() > balance) {
-        //     alert('Amount exceeds card balance! Gift Card balance: ' + balance);
-        // }
         var balance = gift_card_amount[$(this).val()] - gift_card_expense[$(this).val()];
         $('#add-payment input[name="gift_card_id"]').val($(this).val());
-        if ($('input[name="paid_amount"]').val() > balance) {
-            swal('Amount exceeds card balance!", Gift Card balance: ' + balance);
+        if(balance==0){
+            swal("Empty!", "Gift card is already used! ", "error"); 
+        }
+        else if ($('input[name="paid_amount"]').val() > balance) {
+            swal("invalid!", "Gift card is not sufficient! ", "warning"); 
         }
         else{
-            balance=gift_card_amount[$(this).val()] - gift_card_expense[$(this).val()]-balance;
-            swal('Gift Card Applied!"," Gift Card new balance: "' + balance);
+            newbalance=balance-$('input[name="paid_amount"]').val() ;
+            swal("Applied!","Gift Card prev balance: "+balance+"\n Purchased amount: -"+ $('input[name="paid_amount"]').val()+"\n Gift Card new balance: "+ newbalance,"success");
         }
     
     });
@@ -639,10 +642,11 @@ function giftCard() {
         dataType: "json",
         success: function(data) {
             $('#add-payment select[name="gift_card_id_select"]').empty();
+            $('#add-payment select[name="gift_card_id_select"]').append('<option disabled selected>Choose Giftcard</option>');
             $.each(data, function(index) {
                 gift_card_amount[data[index]['id']] = data[index]['amount'];
                 gift_card_expense[data[index]['id']] = data[index]['expense'];
-                $('#add-payment select[name="gift_card_id_select"]').append('<option disabled selected>Choose Giftcard</option> <option value="' + data[index]['id'] + '">' + data[index]['card'] + '</option>');
+                $('#add-payment select[name="gift_card_id_select"]').append('<option value="' + data[index]['id'] + '">' + data[index]['card'] + '</option>');
             });
             $('.selectpicker').selectpicker('refresh');
             $('.selectpicker').selectpicker();

@@ -130,6 +130,7 @@ class salesController extends Controller
             'amount' => $r->amount,
             'customer_id' => $r->customer_id,
             'user_id' => $r->user_id,
+            'expense' => 0,
             'expired_date' => $r->expireddate,
             'created_by' => Auth::user()->id,
         ]);

@@ -195,6 +195,7 @@ class PosController extends Controller
             ]);
             $product->qty = $stored_qty - $purchase_qty;
             $product->save();
+            
             $product_warehouse = Product_warehouse::where('product_id', $product->id)
                 ->where('warehouse_id', $request->warehouse_id)
                 ->first();

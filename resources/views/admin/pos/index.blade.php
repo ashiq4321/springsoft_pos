@@ -107,10 +107,9 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="hidden" required name="warehouse_id_hidden" value="2">
-                                            <select id="warehouse_id" name="warehouse_id" class=" form-control"
-                                                data-live-search="true" data-live-search-style="begins"
-                                                title="Select warehouse...">
+                                            <input type="hidden" required name="warehouse_id">
+                                            <select id="warehouse_id" class=" form-control" data-live-search="true"
+                                                data-live-search-style="begins" title="Select warehouse...">
                                                 <option disabled selected>Choose Warehouse</option>
                                                 @foreach ($all_warehouses as $warehouse)
                                                     <option value={{ $warehouse->id }}>{{ $warehouse->name }}</option>
@@ -347,7 +346,7 @@
                                     <div class="form-group col-md-12 mt-3">
                                         <div class="card-element form-control">
                                             <label> Credit Card *</label>
-                                            <input name="credit_card_id" value="">
+                                            <input type="number" id="credit_card_id" name="credit_card_id">
                                         </div>
                                         <div class="card-errors" role="alert"></div>
                                     </div>
