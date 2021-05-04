@@ -17,20 +17,6 @@ POS || Inventory
 <div class="container-fluid">
 <form method="POST" enctype="multipart/form-data" id="product-form">
 @csrf
-
-{{-- @if (Session::get('success'))
-<div class="alert alert-success">
-{{ Session::get('success') }}
-</div>
-@endif
-
-@if (Session::get('fail'))
-<div class="alert alert-danger">
-{{ Session::get('fail') }}
-</div>
-@endif --}}
-@csrf
-
 <div class="row">
 <div class="col-md-12">
 <div class="card">
@@ -111,14 +97,14 @@ placeholder="Please type product code or name and select..." />
 </div>
 <input id="result" type="hidden" type="text">
 <input id="war" type="hidden" type="text">
-<input id="qty" type="hidden" type="text">
+<input id="qty"  value="{{$data[0]->qty}}" type="hidden" type="text">
 </div>
 </div>
 <div class="row mt-5">
 <div class="col-md-12">
 <h5>Order Table *</h5>
 <div class="table-responsive mt-3">
-<table id="myTable" class="table table-hover order-list">
+<table id="myTable"    class="table table-hover order-list">
 <thead>
 <tr>
 <th>Name</th>
@@ -137,7 +123,7 @@ placeholder="Please type product code or name and select..." />
 <tr>
 <td>{{ $row->name }}</td>
 <td>{{ $row->barcode_symbology }}</td>
-<td><input type="number" class="qty" name="qty[]"
+<td><input type="number"  class="qty" name="qty[]"
 value="{{ $row->pqty }}" step="any" /></td>
 <td><input type="number" class="no-border unit_rate"
 name="unit_price[]" value="{{ $row->price }}"
@@ -152,8 +138,8 @@ step="any" readonly /></td>
 <td><input type="number" class="no-border sub-total"
 name="subtotal[]" value="{{ $row->total }}"
 step="any" readonly /></td>
-<td><button type="button"
-class="delete remove btn btn-sm btn-danger">X</button>
+<td><button type="button" onclick="Delete({{$row->product_id}})"
+class="delete btn btn-sm btn-danger">X</button>
 </td>
 
 <td><input type="hidden" class="no-border tax"
@@ -161,7 +147,7 @@ name="tax_rate[]" value="{{ $row->tax_id }}"
 step="any" readonly /></td>
 
 <input type="hidden" class="product-id"
-name="product_id[]"
+name="product_id[]" 
 value="{{ $row->product_id }}" />
 
 </tr>
@@ -229,7 +215,6 @@ value="{{ $row->product_id }}" />
 <label>Order Tax</label>
 <select class="form-control" name="order_tax_rate">
 <option value="">No Tax</option>
-<option value="" disabled selected>Select Product Unit...</option>
 <option {{ $row->order_tax_rate == '10' ? 'selected' : '' }}
 value="10">vat@10</option>
 <option {{ $row->order_tax_rate == '15' ? 'selected' : '' }}
@@ -457,6 +442,7 @@ width: 150%;
 <script>
 var gift_card_amount = [];
 var gift_card_expense = [];
+var selected_product = new Array
 
 $('#productcodeSearch').on('input', function() {
 var customer_id = $('#customer_id').val();
@@ -494,19 +480,21 @@ response(data);
 select: function(event, ui) {
 $('#productcodeSearch').val(ui.item.label); // display the selected text
 $('#result').val(ui.item.value);
+var product_id = $('#result').val();
+find_in_warehouse(product_id);
+
 return false;
 }
+
 });
 
 }
 
 
-var selected_product = new Array
 $(document).bind('click keyup', '#productcodeSearch', function() {
-if (!selected_product.includes($('#result').val())) {
+if (!selected_product.includes($('#result').val())) {    
 selected_product.push($('#result').val());
-var product_id = $('#result').val();
-find_in_warehouse(product_id);
+
 $.ajax({
 url: '/find/' + $('#result').val(),
 method: 'GET',
@@ -564,6 +552,7 @@ cols += '<td><input  type="hidden" name="subtotal[]" value="' + (1 * data
 'price'] + tax - discount) + '"/></td>';
 
 if ($('#war').val() && $('.product-id').val() != data.product['id']) {
+    
 newRow.append(cols);
 $("table.order-list tbody").append(newRow);
 calculateTotal();
@@ -577,19 +566,19 @@ $('#productcodeSearch').val('');
 $('#result').val('');
 $('#war').val('');
 calculateTotal();
-
 }
 
 }
 
 })
-
 }
 });
 
 
 $("table.order-list tbody").on("click", ".delete", function(event) {
 $(this).closest("tr").remove();
+selected_product.pop(selected_product.length)
+
 calculateTotal();
 });
 
@@ -604,15 +593,15 @@ var qty = parseInt($(this).find('.qty').val())
 parseInt($(this).find('.sub-total').val(qty * unit_rate + tax - discount));
 parseInt($(this).find('.total').val(qty * unit_rate + tax - discount));
 
+if($('#qty').val() < qty){
+        alert('No More Product left in this selected warehouse');
+        $('.qty').val(0);
+    }
 
 });
 calculateTotal();
 
 });
-
-
-
-
 
 function calculateTotal() {
 //Sum of quantity
@@ -821,13 +810,37 @@ alert('Amount exceeds card balance! Gift Card balance: ' + balance);
 });
 
 
+// function Delete(id){
+// swal({
+// title: "Are you sure Want to remove this product?",
+// text: "Once Delete, This will be Permanently Delete!",
+// icon: "warning",
+// buttons: true,
+// dangerMode: true,
+// })
+// .then((willDelete) => {
+// if (willDelete) {           
+// $.ajax({
+// type:"get",
+// datatype:"json",
+// url:"/productsale/delete/"+id,
+// success:function(response){
+//     $('#myTable').ajax.reload();
+
+// }
+// })  
+// swal("Deleted!", "Data has been Successfully Deleted!", "success");
+// }
+// else {
+// swal("Safe Data!");
+// }
+// });
+// }
 
 $('#submit').on("click", function(e) {
 e.preventDefault();
 var formData = new FormData(document.getElementById("product-form"));
 var id = {{ $row->id }};
-//alert(id);
-
 $.ajax({
 type: 'POST',
 url: '/updatesale/' + id,
@@ -838,10 +851,7 @@ processData: false,
 success: function(response) {
 console.log(response);
 swal("Updated!", "Data has been Successfully Updated!", "success");
-//console.log(data);
-//alert("success");
 location.href = '/sales';
-
 
 }
 

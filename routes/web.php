@@ -23,7 +23,7 @@ Auth::routes();
 // Route::get('/', function () {
 //     return view('home');
 // });
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@home');
 Route::get('/home', 'HomeController@home');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
@@ -278,6 +278,7 @@ Route::post('/payment', 'Admin\salesController@payment')->name('payment');
 Route::get('/sale/delete/{id}', 'Admin\salesController@saleDelete');
 Route::get('/sale/editdata/{id}', 'Admin\salesController@saleEdit');
 Route::post('/updatesale/{id}', 'Admin\salesController@saleUpdate');
+Route::get('/productsale/delete/{id}', 'Admin\salesController@productsaleDelete');
 
 
 

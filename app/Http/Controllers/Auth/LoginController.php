@@ -46,7 +46,6 @@ class LoginController extends Controller
         return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => '1'];
     }
 
-
     public function logout(Request $request)
     {
         Auth::logout();
