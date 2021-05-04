@@ -543,7 +543,7 @@ class salesController extends Controller
                 $old = $product_sale_check->qty;
                 $new_quantity = $request->qty[$key];
                 $product_sale_check->qty = $new_quantity;
-                $product_sale_check->update();
+                $product_sale_check->save();
                 if ($old < $new_quantity) {
                     $tem = $new_quantity - $old;
                     $product_warehouse = Product_warehouse::where('product_id', $p_id)
@@ -634,9 +634,23 @@ class salesController extends Controller
 
         //         }
 
-
-
     }
+
+    // public function productsaleDelete($id){        
+    //      Product_sale::where('product_id', $id)->delete();
+    //      $ps = Product_sale::find($id);         
+    //      $product_warehouse = Product_warehouse::where('product_id', $id)
+    //      ->where('warehouse_id', $request->warehouse_id)
+    //      ->first();
+    //      $product_warehouse->qty = $product_warehouse->qty + $ps->qty;
+    //      $product_warehouse->save();
+     
+    //      $product = Product::find($id);
+    //      $product->qty = $product->qty +  $ps->qty;
+    //      $product->save();
+    //     return Redirect()->back();
+
+    // }
 
     //*/ Delivary by Ashraful Alam*//*
 
