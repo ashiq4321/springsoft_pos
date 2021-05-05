@@ -271,16 +271,6 @@ $(document).ready(function() {
         });
 
     });
-    $(document).on('keyup', '#filter', function() {
-        var query = $(this).val();
-        search_product_data(query);
-    });
-
-    $('#searched_product').on("click", (function() {
-        var product_id = $('#searched_product').val();
-        find_in_warehouse(product_id);
-
-    }));
 
     /* $('select[name="paid_by_id_select"]').on("change", function() {
         var id = $(this).val();
@@ -418,7 +408,6 @@ function productSearch(data, stored_quantity) {
                     flag = 0;
                 }
             });
-            $("input[name='product_code_name']").val('');
             if (flag) {
                 addNewProduct(data);
             }
@@ -681,35 +670,6 @@ function confirmCancel() {
 
 }
 
-function search_product_data(query = '') {
-    $.ajax({
-        url: '/pos/filter',
-        method: 'GET',
-        data: { query: query },
-        dataType: 'json',
-        success: function(data) {
-            if (data != null) {
-                var len = data.length;
-                $("#searched_product").empty();
-                for (var i = 0; i < len; i++) {
-                    var id = data[i]['id'];
-                    var name = data[i]['name'];
-                    var barcode_symbology = data[i]['barcode_symbology']; //code
-
-                    $("#searched_product").append("<option value='" + id + "'>" + barcode_symbology + '(' + name + ')' + "</option>");
-
-                }
-            }
-
-
-        },
-        error: function(response) {
-            alert('error');
-            console.log(response);
-        }
-    })
-}
-
 function change(paying_amount, paid_amount) {
     $("#change").text(parseFloat(paying_amount - paid_amount).toFixed(2));
     $('input[name="change"]').val($("#change").text());
@@ -722,12 +682,12 @@ function find_in_warehouse(product_id) {
     var customer_id = $("#customer_id").val();
 
     if (!warehouse_id)
-        alert('Please select Warehouse!');
+        swal('Please select Warehouse!');
     else if (!biller_id)
-        alert('Please select Biller !');
+        swal('Please select Biller !');
 
     else if (!customer_id)
-        alert('Please select Customer !');
+        swal('Please select Customer !');
     else {
         $.ajax({
             url: '/pos/product_check',
@@ -759,4 +719,29 @@ function confirmDelete() {
         return true;
     }
     return false;
+}
+function search() {
+$("#productcodeSearch").autocomplete({
+source: function(request, response) {
+$.ajax({
+url: "/pos/filter",
+type: 'post',
+dataType: "json",
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+data: {
+search: request.term
+},
+success: function(data) {
+response(data);
+}
+});
+},
+select: function(event, ui) {
+$('#productcodeSearch').val('');
+find_in_warehouse(ui.item.value);
+return false;
+}
+});
 }

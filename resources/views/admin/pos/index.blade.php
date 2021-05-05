@@ -156,12 +156,19 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="search-box form-group">
-                                            {{-- <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control"  /> --}}
+                                        {{-- <div class="search-box form-group">
                                             <input type="text" name="product_code_name" id="filter"
                                                 placeholder="Scan/Search product by name/code" class="form-control" />
                                             <select id='searched_product'>
                                             </select>
+                                        </div> --}}
+                                        <label>Select Product</label>
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-md btn-secondary rounded-0"><i
+                                                    class="fa fa-barcode"></i></button>
+                                            <input class="form-control" type="text" onkeyup="search()"
+                                                name="productcodeSearch" id="productcodeSearch"
+                                                placeholder="Please type product code or name and select..." />
                                         </div>
                                     </div>
                                 </div>
@@ -618,6 +625,7 @@
         < script src = "{{ asset('assets/plugins/datatables-net/jquery.dataTables.js') }}" >
 
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{ asset('assets/plugins/datatables-net-bs4/dataTables.bootstrap4.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>

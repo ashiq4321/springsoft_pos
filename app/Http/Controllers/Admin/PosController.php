@@ -51,19 +51,22 @@ class PosController extends Controller
 
     public function productFilter(Request $request)
     {
+        $search = $request->search;
 
-        $data = null;
-        $query = $request->get('query');
-        if ($query != '') {
-            $data = DB::table('products')
-                ->where('name', 'like', '%' . $query . '%')
-                ->orWhere('barcode_symbology', 'like', '%' . $query . '%')
-                ->orderBy('id', 'desc')
-                ->get();
+        if ($search == '') {
+            $product = Product::orderby('name', 'asc')->select('id', 'barcode_symbology', 'name')->limit(5)->get();
         } else {
-            $data = null;
+            $product = Product::orderby('name', 'asc')->select('id', 'barcode_symbology', 'name')
+                ->where('barcode_symbology', 'like', '%' . $search . '%')
+                ->OrWhere('name', 'like', '%' . $search . '%')
+                ->limit(5)->get();
         }
-        echo json_encode($data);
+        $response = array();
+        foreach ($product as $pro) {
+            $response[] = array("value" => $pro->id, "label" => $pro->barcode_symbology . ' (' . $pro->name . ')');
+        }
+
+        return response()->json($response);
     }
 
     //productSearch

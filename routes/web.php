@@ -62,7 +62,7 @@ Route::post('/productAlert', 'Admin\ProductController@quantityAlert_notification
 Route::get('/pos', 'Admin\posController@index')->name('admin.pos');
 //admin/product_search
 Route::get('/pos/product_search', 'Admin\posController@productSearch')->name('pos.product-search'); //on click find
-Route::get('/pos/filter', 'Admin\posController@productFilter')->name('pos.product-filter'); // on-key search
+Route::post('/pos/filter', 'Admin\posController@productFilter')->name('pos.product-filter'); // on-key search
 Route::get('/pos/product_category/{category_id}', 'Admin\posController@productCategory')->name('pos.product_category'); // assemble by catagory
 Route::get('/pos/product_brand/{brand_id}', 'Admin\posController@productBrand')->name('pos.product_brand'); // assemble by brand
 Route::get('/pos/product_check', 'Admin\posController@productCeheck')->name('pos.product_ceheck'); // assemble by brand
