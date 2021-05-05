@@ -527,9 +527,9 @@ var tax = parseInt($(this).find('.tax').val())
 var qty = parseInt($(this).find('.qty').val())
 parseInt($(this).find('.sub-total').val(qty * unit_rate + tax - discount));
 parseInt($(this).find('.total').val(qty * unit_rate + tax - discount));
-if($('#qty').val() < qty){
-        alert('No More Product left in this selected warehouse');
-        $('.qty').val(1);
+if($('#qty').val()<qty){
+        alert('No More Product left in this selected warehouse please change the warehouse');
+        $('.qty').val(0);
     }
 });
 calculateTotal();
