@@ -336,7 +336,7 @@ class salesController extends Controller
             $product->qty = $stored_qty - $purchase_qty;
             $product->save();
             $product_warehouse = Product_warehouse::where('product_id', $product->id)
-                ->where('warehouse_id', $request->warehouse_id)
+                ->orWhere('warehouse_id','=',$request->warehouse_id)
                 ->first();
             $product_warehouse->qty = $product_warehouse->qty - $purchase_qty;
             $product_warehouse->save();
@@ -637,21 +637,21 @@ class salesController extends Controller
 
     }
 
-    // public function productsaleDelete($id){        
-    //      Product_sale::where('product_id', $id)->delete();
-    //      $ps = Product_sale::find($id);         
-    //      $product_warehouse = Product_warehouse::where('product_id', $id)
-    //      ->where('warehouse_id', $request->warehouse_id)
-    //      ->first();
-    //      $product_warehouse->qty = $product_warehouse->qty + $ps->qty;
-    //      $product_warehouse->save();
+    public function productsaleDelete($id){        
+         Product_sale::where('product_id', $id)->delete();
+         $ps = Product_sale::find($id);         
+         $product_warehouse = Product_warehouse::where('product_id', $id)
+         ->where('warehouse_id', $request->warehouse_id)
+         ->first();
+         $product_warehouse->qty = $product_warehouse->qty ;
+         $product_warehouse->save();
      
-    //      $product = Product::find($id);
-    //      $product->qty = $product->qty +  $ps->qty;
-    //      $product->save();
-    //     return Redirect()->back();
+         $product = Product::find($id);
+         $product->qty = $product->qty ;
+         $product->save();
+         return Redirect()->back();
 
-    // }
+    }
 
     //*/ Delivary by Ashraful Alam*//*
 
