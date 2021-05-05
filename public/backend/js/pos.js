@@ -83,6 +83,7 @@ $(document).ready(function() {
 
     $("#gift-card-btn").on("click", function() {
         $("#credit_card_id").attr("required", false);
+        $("#submit-btn").prop('disabled', true);
         $('input[name="credit_card_id"]').val('');
         $('#paid_by').val('gift card');
         $('select[name="paid_by_id_select"]').val(2);
@@ -116,6 +117,7 @@ $(document).ready(function() {
     });
 
     $("#credit-card-btn").on("click", function() {
+        $("#submit-btn").prop('disabled', false);
         $("#credit_card_id").attr("required", true);
         $('select[name="paid_by_id_select"]').val(3);
         $('#paid_by').val('card');
@@ -125,6 +127,7 @@ $(document).ready(function() {
     });
 
     $("#cheque-btn").on("click", function() {
+        $("#submit-btn").prop('disabled', false);
         $('input[name="credit_card_id"]').val('');
         $('select[name="paid_by_id_select"]').val(4);
         $('.selectpicker').selectpicker('refresh');
@@ -133,6 +136,7 @@ $(document).ready(function() {
     });
 
     $("#cash-btn").on("click", function() {
+        $("#submit-btn").prop('disabled', false);
         $("#credit_card_id").attr("required", false);
         $('input[name="credit_card_id"]').val('');
         $('#paid_by').val('cash');
@@ -278,7 +282,7 @@ $(document).ready(function() {
 
     }));
 
-    $('select[name="paid_by_id_select"]').on("change", function() {
+    /* $('select[name="paid_by_id_select"]').on("change", function() {
         var id = $(this).val();
         $(".payment-form").off("submit");
         if (id == 2) {
@@ -299,10 +303,11 @@ $(document).ready(function() {
                 deposits();
             }
         }
-    });
+    }); */
 
 
     $('#add-payment select[name="gift_card_id_select"]').on("change", function() {
+        $("#submit-btn").prop('disabled', true);
         var balance = gift_card_amount[$(this).val()] - gift_card_expense[$(this).val()];
         $('#add-payment input[name="gift_card_id"]').val($(this).val());
         if(balance==0){
@@ -312,6 +317,7 @@ $(document).ready(function() {
             swal("invalid!", "Gift card is not sufficient! ", "warning"); 
         }
         else{
+            $("#submit-btn").prop('disabled', false);
             newbalance=balance-$('input[name="paid_amount"]').val() ;
             swal("Applied!","Gift Card prev balance: "+balance+"\n Purchased amount: -"+ $('input[name="paid_amount"]').val()+"\n Gift Card new balance: "+ newbalance,"success");
         }
@@ -646,7 +652,7 @@ function giftCard() {
             $.each(data, function(index) {
                 gift_card_amount[data[index]['id']] = data[index]['amount'];
                 gift_card_expense[data[index]['id']] = data[index]['expense'];
-                $('#add-payment select[name="gift_card_id_select"]').append('<option value="' + data[index]['id'] + '">' + data[index]['card'] + '</option>');
+                $('#add-payment select[name="gift_card_id_select"]').append('<option value="' + data[index]['id'] + '">' + data[index]['card']+"-$"+data[index]['amount'] + '</option>');
             });
             $('.selectpicker').selectpicker('refresh');
             $('.selectpicker').selectpicker();
